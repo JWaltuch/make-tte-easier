@@ -22,14 +22,12 @@ Visit http://localhost:3000/
 ##### TO DO
 
 - handle custom fields?
-- add husky hook
 - github lint checks
 - **pagination (+ user can choose page size)**
 - links look nicer
 - full page niceness
 - add missing types - linter check types
 - add box back, make things look nicer
-- **loading spinner**
 - **map event type ids to human readable event types**
 - **include and filter by game system**
 - **filter by not scheduled**
