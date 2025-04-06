@@ -8,11 +8,14 @@
   "dependencies": {
     "next": "^15.2.4",
     "node": "^23.11.0",
-    "react": "^19.1.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@types/node": "22.14.0",
     "@types/react": "^19.1.0",
+    "eslint": "^9.24.0",
+    "eslint-config-next": "15.2.4",
     "typescript": "5.8.3"
   }
 }
