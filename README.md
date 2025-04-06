@@ -14,3 +14,4 @@ This is just a personal project to make it easier for me to see new items on tte
 - pagination
 - links look nicer
 - full page niceness
+- add missing types - linter check types
