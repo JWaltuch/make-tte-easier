@@ -8,9 +8,9 @@ This is just a personal project to make it easier for me to see new items on tte
 
 ##### TO DO
 
-- handle custom fields
+- handle custom fields?
 - add husky hook
 - add prettier
-- all pages
-- sort pages
-- link to "real" event
+- pagination
+- links look nicer
+- full page niceness

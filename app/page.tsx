@@ -33,10 +33,11 @@ const fetchData = async (
   const data = await fetch(url);
   let events = await data.json();
 
+  // SAVE FOR SETTING UP PAGINATION
   const nextPageNumber = events["result"]["paging"]["next_page_number"];
   const totalPages = events["result"]["paging"]["total_pages"];
+
   const items = events["result"]["items"];
-  console.log([...rowData, ...items])
   setData([...rowData, ...items]);
   return {items, nextPageNumber, totalPages};
 
