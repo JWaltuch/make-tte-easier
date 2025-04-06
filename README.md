@@ -29,3 +29,5 @@ Visit http://localhost:3000/
 - full page niceness
 - add missing types - linter check types
 - add box back, make things look nicer
+- loading spinner
+- map event type ids to human readable event types

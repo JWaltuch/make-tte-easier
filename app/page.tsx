@@ -16,6 +16,7 @@ type BasicRowType = {
   room_name: string;
   space_name: string;
   date_created: Date | string;
+  date_updated: Date | string;
   view_uri: string;
 }
 
@@ -44,7 +45,7 @@ const fetchData = async (
 }
 
 export default function Page() {
-  const COL_NAMES = ['name', 'description', 'startdaypart_name', 'type_id', 'date_created', 'space_name', 'room_name'];
+  const COL_NAMES = ['name', 'description', 'startdaypart_name', 'type_id', 'date_created', 'date_updated', 'space_name', 'room_name'];
 
   const [rowData, setRowData] = useState([]);
   const [rows, setRows] = useState<BasicRowType[]>([]);
@@ -76,11 +77,12 @@ export default function Page() {
           id: row.id,
           name: row.name,
           description: row.description,
-          startdaypart_name: row.startdaypart_name,
-          room_name: row.room_name,
-          space_name: row.space_name,
+          startdaypart_name: row.startdaypart_name ?? "Not scheduled",
+          room_name: row.room_name ?? "Not scheduled",
+          space_name: row.space_name ?? "Not scheduled",
           type_id: row.type_id,
           date_created: row.date_created,
+          date_updated: row.date_updated,
           view_uri: row.view_uri
         }
       }))
@@ -92,6 +94,7 @@ export default function Page() {
       <DataGrid
         rows={rows}
         columns={cols}
+   //loading={true}
         initialState={{ pagination: { } }}
         pageSizeOptions={[100, 1000]}
         sx={{ border: 0 }}
