@@ -11,6 +11,8 @@ npm install
 npm run dev
 ```
 
+Visit http://localhost:3000/
+
 ### Resources
 
 [tte API](https://tabletop.events/developer/Introduction.html)
@@ -20,10 +22,13 @@ npm run dev
 ##### TO DO
 
 - handle custom fields?
-- add husky hook
-- add prettier
-- pagination (+ user can choose page size)
+- github lint checks
+- **pagination (+ user can choose page size)**
 - links look nicer
 - full page niceness
 - add missing types - linter check types
 - add box back, make things look nicer
+- **map event type ids to human readable event types**
+- **include and filter by game system**
+- **filter by not scheduled**
+- **use update by date**
