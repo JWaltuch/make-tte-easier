@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 
@@ -15,12 +15,13 @@ type BasicRowType = {
   room_name: string;
   space_name: string;
   date_created: Date | string;
+  view_uri: string;
 }
 
 const fetchData = async (setData: Function)  => {
   const data = await fetch(`https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`)
   const posts = await data.json()
-  // console.log(posts["result"]["items"])
+  console.log(posts)
   setData(posts["result"]["items"]);
   return posts["result"]["items"];
 }
@@ -31,7 +32,9 @@ export default function Page() {
   const [rowData, setRowData] = useState([]);
   const [rows, setRows] = useState<BasicRowType[]>([]);
   const [cols, setCols] = useState<GridColDef<(typeof rows)[number]>[]>(COL_NAMES.map((name) => {
-    return {field: name, headerName: name, width: 150}
+    return {field: name, headerName: name, width: 150, renderCell: (params) => (
+      <a href={`https://tabletop.events${params.row.view_uri}`}>{params.value}</a>
+    )}
   }));
 
   useEffect(() => {
@@ -49,16 +52,15 @@ export default function Page() {
           room_name: row.room_name,
           space_name: row.space_name,
           type_id: row.type_id,
-          date_created: row.date_created
+          date_created: row.date_created,
+          view_uri: row.view_uri
         }
       }))
     }
   }, [rowData])
 
-  console.log(rows)
   return (
 
-    <Box sx={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={rows}
         columns={cols}
@@ -66,6 +68,5 @@ export default function Page() {
         pageSizeOptions={[100, 1000]}
         sx={{ border: 0 }}
       />
-  </Box>
 );
 }
