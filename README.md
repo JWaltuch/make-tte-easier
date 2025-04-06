@@ -23,7 +23,7 @@ Visit http://localhost:3000/
 
 - handle custom fields?
 - add husky hook
-- add prettier
+- github lint checks
 - **pagination (+ user can choose page size)**
 - links look nicer
 - full page niceness

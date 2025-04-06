@@ -4,3 +4,13 @@ coverage
 
 # Ignore all HTML files:
 **/*.html
+
+.next
+.prettierignore
+.husky
+.log
+
+node_modules
+
+package-lock.json
+next-env.d.ts
