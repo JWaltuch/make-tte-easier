@@ -11,6 +11,8 @@ npm install
 npm run dev
 ```
 
+Visit http://localhost:3000/
+
 ### Resources
 
 [tte API](https://tabletop.events/developer/Introduction.html)
