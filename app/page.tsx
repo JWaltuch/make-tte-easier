@@ -1,14 +1,27 @@
 'use client'
 
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Box } from '@mui/material';
 
 const ORIGINS_2025_ID = "8D0356F0-D38B-11EF-9091-1D8264B1C7F0";
-const CLOCKTOWER_2025_ID = "32D6B730-365B-11EF-B58A-DCC620F8A28C";
+//const CLOCKTOWER_2025_ID = "32D6B730-365B-11EF-B58A-DCC620F8A28C";
 const ITEMS_PER_PAGE = "100";
 
 type BasicRowType = {
+  id: string;
+  name: string;
+  description: string;
+  startdaypart_name: string;
+  type_id: string;
+  room_name: string;
+  space_name: string;
+  date_created: Date | string;
+  date_updated: Date | string;
+  view_uri: string;
+}
+
+type AdvancedRowType = {
+  id: string;
   name: string;
   description: string;
   startdaypart_name: string;
@@ -22,17 +35,17 @@ type BasicRowType = {
 
 const fetchData = async (
   rowData: BasicRowType[],
-  setData: Function,
+  setData: Dispatch<SetStateAction<AdvancedRowType[]>>,
   currentPageNumber: number
 )  => {
 
-  let url = new URL(`https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`);
+  const url = new URL(`https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`);
   url.searchParams.append('_items_per_page', ITEMS_PER_PAGE);
   url.searchParams.append('_page_number', String(currentPageNumber));
   url.searchParams.append('_order_by', 'date_created');
   url.searchParams.append('_sort_order', 'desc');
   const data = await fetch(url);
-  let events = await data.json();
+  const events = await data.json();
 
   // SAVE FOR SETTING UP PAGINATION
   const nextPageNumber = events["result"]["paging"]["next_page_number"];
@@ -45,26 +58,29 @@ const fetchData = async (
 }
 
 export default function Page() {
-  const COL_NAMES = ['name', 'description', 'startdaypart_name', 'type_id', 'date_created', 'date_updated', 'space_name', 'room_name'];
 
-  const [rowData, setRowData] = useState([]);
+  const [rowData, setRowData] = useState<AdvancedRowType[]>([]);
   const [rows, setRows] = useState<BasicRowType[]>([]);
-  const [cols, setCols] = useState<GridColDef<(typeof rows)[number]>[]>(COL_NAMES.map((name) => {
+
+  const COL_NAMES = ['name', 'description', 'startdaypart_name', 'type_id', 'date_created', 'date_updated', 'space_name', 'room_name'];
+  const cols : GridColDef<(typeof rows)[number]>[] = COL_NAMES.map((name) => {
     return {field: name, headerName: name, width: 150, renderCell: (params) => (
       <a href={`https://tabletop.events${params.row.view_uri}`}>{params.value}</a>
     )}
-  }));
+  });
 
   useEffect(() => {
     const currentPageNumber = 1;
-    fetchData(rowData, setRowData, currentPageNumber).then((fetchedData) => {
+    fetchData(rowData, setRowData, currentPageNumber);
+    //when changed, can remove "rowData" dependency
+    // .then((fetchedData) => {
       // console.log(fetchedData)
       // currentPageNumber = fetchedData["nextPageNumber"];
       // while (currentPageNumber <= fetchedData["totalPages"]){
       //   currentPageNumber++;
       //   fetchData(fetchedData["items"], setRowData, currentPageNumber);
       // }
-    });
+    // });
 
     //what if instead, sort data when calling? then i can use the data grid pagination and match it with this pagination
   }, [])
@@ -94,7 +110,7 @@ export default function Page() {
       <DataGrid
         rows={rows}
         columns={cols}
-   //loading={true}
+        loading={rows.length === 0}
         initialState={{ pagination: { } }}
         pageSizeOptions={[100, 1000]}
         sx={{ border: 0 }}

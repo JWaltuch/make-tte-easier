@@ -4,7 +4,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier"
+    "prettier": "prettier -w"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
