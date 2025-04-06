@@ -19,7 +19,11 @@ npm run dev
 
 ##### TO DO
 
+- handle custom fields?
 - add husky hook
 - add prettier
-- all pages
+- pagination (+ user can choose page size)
+- links look nicer
+- full page niceness
+- add missing types - linter check types
 - add box back, make things look nicer

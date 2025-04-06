@@ -6,6 +6,7 @@ import { Box } from '@mui/material';
 
 const ORIGINS_2025_ID = "8D0356F0-D38B-11EF-9091-1D8264B1C7F0";
 const CLOCKTOWER_2025_ID = "32D6B730-365B-11EF-B58A-DCC620F8A28C";
+const ITEMS_PER_PAGE = "100";
 
 type BasicRowType = {
   name: string;
@@ -18,12 +19,28 @@ type BasicRowType = {
   view_uri: string;
 }
 
-const fetchData = async (setData: Function)  => {
-  const data = await fetch(`https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`)
-  const posts = await data.json()
-  console.log(posts)
-  setData(posts["result"]["items"]);
-  return posts["result"]["items"];
+const fetchData = async (
+  rowData: BasicRowType[],
+  setData: Function,
+  currentPageNumber: number
+)  => {
+
+  let url = new URL(`https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`);
+  url.searchParams.append('_items_per_page', ITEMS_PER_PAGE);
+  url.searchParams.append('_page_number', String(currentPageNumber));
+  url.searchParams.append('_order_by', 'date_created');
+  url.searchParams.append('_sort_order', 'desc');
+  const data = await fetch(url);
+  let events = await data.json();
+
+  // SAVE FOR SETTING UP PAGINATION
+  const nextPageNumber = events["result"]["paging"]["next_page_number"];
+  const totalPages = events["result"]["paging"]["total_pages"];
+
+  const items = events["result"]["items"];
+  setData([...rowData, ...items]);
+  return {items, nextPageNumber, totalPages};
+
 }
 
 export default function Page() {
@@ -38,11 +55,22 @@ export default function Page() {
   }));
 
   useEffect(() => {
-    const fetchedData = fetchData(setRowData);
+    const currentPageNumber = 1;
+    fetchData(rowData, setRowData, currentPageNumber).then((fetchedData) => {
+      // console.log(fetchedData)
+      // currentPageNumber = fetchedData["nextPageNumber"];
+      // while (currentPageNumber <= fetchedData["totalPages"]){
+      //   currentPageNumber++;
+      //   fetchData(fetchedData["items"], setRowData, currentPageNumber);
+      // }
+    });
+
+    //what if instead, sort data when calling? then i can use the data grid pagination and match it with this pagination
   }, [])
 
   useEffect(() => {
     if (rowData.length > 0) {
+      console.log(rowData)
       setRows(rowData.map((row) => {
         return {
           id: row.id,
