@@ -28,6 +28,8 @@ const fetchData = async (
   let url = new URL(`https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`);
   url.searchParams.append('_items_per_page', ITEMS_PER_PAGE);
   url.searchParams.append('_page_number', String(currentPageNumber));
+  url.searchParams.append('_order_by', 'date_created');
+  url.searchParams.append('_sort_order', 'desc');
   const data = await fetch(url);
   let events = await data.json();
 
@@ -53,10 +55,14 @@ export default function Page() {
 
   useEffect(() => {
     const currentPageNumber = 1;
-    const fetchedData = fetchData(rowData, setRowData, currentPageNumber);
-    // while (fetchedData["nextPageNumber"] >= fetchedData["totalPages"]){
-    //   fetchData(fetchedData["items"], setRowData, fetchedData["nextPageNumber"]);
-    // }
+    fetchData(rowData, setRowData, currentPageNumber).then((fetchedData) => {
+      // console.log(fetchedData)
+      // currentPageNumber = fetchedData["nextPageNumber"];
+      // while (currentPageNumber <= fetchedData["totalPages"]){
+      //   currentPageNumber++;
+      //   fetchData(fetchedData["items"], setRowData, currentPageNumber);
+      // }
+    });
 
     //what if instead, sort data when calling? then i can use the data grid pagination and match it with this pagination
   }, [])
