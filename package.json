@@ -1,7 +1,7 @@
 {
     "scripts": {
         "dev": "next dev",
-        "build": "prettier --check . && stylelint --allow-empty-input \"**/*.{css,scss}\" && next build",
+        "build": "prettier --check . && next lint && next build",
         "start": "next start",
         "lint": "next lint",
         "prettier": "prettier . --check --config prettierrc.json --ignore-path .prettierignore",
