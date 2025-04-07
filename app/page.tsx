@@ -16,10 +16,11 @@ type BasicRowType = {
     type_id: string;
     type: string;
     room_name: string;
-    space_name: string;
+    space: string;
     date_created: Date | string;
     date_updated: Date | string;
     view_uri: string;
+    duration: string;
 };
 
 type AdvancedRowType = {
@@ -36,6 +37,7 @@ type AdvancedRowType = {
     date_created: Date | string;
     date_updated: Date | string;
     view_uri: string;
+    duration: string;
 };
 
 const fetchEvents = async (
@@ -83,16 +85,17 @@ export default function Page() {
         "type",
         "description",
         "startdaypart_name",
+        "duration",
         "date_created",
         "date_updated",
-        "space_name",
+        "space",
         "room_name",
     ];
     const cols: GridColDef<(typeof rows)[number]>[] = COL_NAMES.map((name) => {
         return {
             field: name,
             headerName: name,
-            width: 200,
+            width: name === "duration" || name === "space" || name === "type" ? 80 : 170,
             renderCell: (params) => (
                 <a href={`https://tabletop.events${params.row.view_uri}`}>
                     {params.value}
@@ -117,12 +120,13 @@ export default function Page() {
                         startdaypart_name:
                             row.startdaypart_name ?? "Not scheduled",
                         room_name: row.room_name ?? "Not scheduled",
-                        space_name: row.space_name ?? "Not scheduled",
+                        space: row.space_name ?? "Not scheduled",
                         type_id: row.type_id,
                         type: row.type.name,
                         date_created: row.date_created,
                         date_updated: row.date_updated,
                         view_uri: row.view_uri,
+                        duration: `${Number(row.duration) / 60} hrs`,
                     };
                 })
             );
