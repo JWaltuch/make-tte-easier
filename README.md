@@ -23,10 +23,9 @@ Visit http://localhost:3000/
 
 - handle custom fields?
 - github lint checks
-- user can choose page size
 - links look nicer
 - full page niceness
 - add missing types - linter check types
-- add box back, make things look nicer
-- **map event type ids to human readable event types**
+- user can select/provide convention id
+- more description on hover
 - **include and filter by game system and event types**

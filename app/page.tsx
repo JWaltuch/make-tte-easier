@@ -2,7 +2,7 @@
 
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
-import { FormControl, Input, InputLabel, MenuItem, Paper, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Paper, Select } from "@mui/material";
 
 const ORIGINS_2025_ID = "8D0356F0-D38B-11EF-9091-1D8264B1C7F0";
 //const CLOCKTOWER_2025_ID = "32D6B730-365B-11EF-B58A-DCC620F8A28C";
@@ -80,9 +80,9 @@ export default function Page() {
 
     const COL_NAMES = [
         "name",
+        "type",
         "description",
         "startdaypart_name",
-        "type",
         "date_created",
         "date_updated",
         "space_name",
@@ -92,7 +92,7 @@ export default function Page() {
         return {
             field: name,
             headerName: name,
-            width: 150,
+            width: 200,
             renderCell: (params) => (
                 <a href={`https://tabletop.events${params.row.view_uri}`}>
                     {params.value}
@@ -131,7 +131,6 @@ export default function Page() {
 
 
     const onPaginationModelChange = (model: GridPaginationModel) => {
-      console.log("changed")
       const nextPage = model.page;
       fetchEvents(setRowData, nextPage + 1);
       setCurrentPageNumber(nextPage + 1);
