@@ -23,12 +23,10 @@ Visit http://localhost:3000/
 
 - handle custom fields?
 - github lint checks
-- **pagination (+ user can choose page size)**
+- user can choose page size
 - links look nicer
 - full page niceness
 - add missing types - linter check types
 - add box back, make things look nicer
 - **map event type ids to human readable event types**
-- **include and filter by game system**
-- **filter by not scheduled**
-- **use update by date**
+- **include and filter by game system and event types**
