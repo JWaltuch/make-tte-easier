@@ -39,14 +39,14 @@ const fetchData = async (
     currentPageNumber: number
 ) => {
     const url = new URL(
-        `https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events`
+        `https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events?is_scheduled=1`
     );
     url.searchParams.append("_items_per_page", ITEMS_PER_PAGE);
     url.searchParams.append("_page_number", String(currentPageNumber));
-    url.searchParams.append("_order_by", "date_created");
+    url.searchParams.append("_order_by", "date_updated");
     url.searchParams.append("_sort_order", "desc");
-    url.searchParams.append("_include_related_objects", "event_type");
-    url.searchParams.append("_include_related_objects", "event_submission");
+    // url.searchParams.append("_include_related_objects", "eventtype");
+    // url.searchParams.append("_include_related_objects", "eventsubmission");
     const data = await fetch(url);
     const events = await data.json();
 
