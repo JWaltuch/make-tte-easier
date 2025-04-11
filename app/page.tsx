@@ -47,7 +47,7 @@ const fetchEvents = async (
     setTotalPages?: Dispatch<SetStateAction<number[]>>,
 ) => {
     const url = new URL(
-        `https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events?is_scheduled=1`
+        `https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events?is_scheduled=1&is_cancelled=0`
     );
     url.searchParams.append("_items_per_page", ITEMS_PER_PAGE);
     url.searchParams.append("_page_number", String(currentPageNumber));
@@ -97,7 +97,7 @@ export default function Page() {
             headerName: name,
             width: name === "duration" || name === "space" || name === "type" ? 80 : 170,
             renderCell: (params) => (
-                <a href={`https://tabletop.events${params.row.view_uri}`}>
+                <a href={`https://tabletop.events${params.row.view_uri}`} target="_blank" rel="noopener noreferrer">
                     {params.value}
                 </a>
             ),
