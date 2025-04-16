@@ -198,9 +198,6 @@ export default function Page() {
           pageSizeOptions={[100]}
           sx={{
             border: 0,
-            '& .MuiDataGrid-cell:hover': {
-              color: 'primary.main',
-            },
           }}
         />
       </Paper>
