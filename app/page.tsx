@@ -8,6 +8,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Tooltip,
 } from '@mui/material';
 
 const ORIGINS_2025_ID = '8D0356F0-D38B-11EF-9091-1D8264B1C7F0';
@@ -106,20 +107,25 @@ export default function Page() {
       width:
         name === 'duration' || name === 'space' || name === 'type' ? 80 : 170,
       renderCell: (params) => (
-        <a
-          href={`https://tabletop.events${params.row.view_uri}`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Tooltip
+          title={name === 'description' ? params.row.description : ''}
+          placement="bottom"
         >
-          {params.value}
-        </a>
+          <a
+            href={`https://tabletop.events${params.row.view_uri}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {params.value}
+          </a>
+        </Tooltip>
       ),
     };
   });
 
   useEffect(() => {
     fetchEvents(setRowData, currentPageNumber, setTotalItems, setTotalPages);
-  }, []);
+  }, [currentPageNumber]);
 
   useEffect(() => {
     if (rowData.length > 0) {
@@ -147,7 +153,6 @@ export default function Page() {
 
   const onPaginationModelChange = (model: GridPaginationModel) => {
     const nextPage = model.page;
-    fetchEvents(setRowData, nextPage + 1);
     setCurrentPageNumber(nextPage + 1);
     setPaginationModel({ ...model, page: nextPage });
   };
@@ -172,7 +177,11 @@ export default function Page() {
           }}
         >
           {totalPages.map((pg) => {
-            return <MenuItem value={pg}>{pg}</MenuItem>;
+            return (
+              <MenuItem value={pg} key={pg}>
+                {pg}
+              </MenuItem>
+            );
           })}
         </Select>
       </FormControl>
@@ -187,7 +196,12 @@ export default function Page() {
           paginationMeta={{ hasNextPage: currentPageNumber * 100 < totalItems }}
           onPaginationModelChange={onPaginationModelChange}
           pageSizeOptions={[100]}
-          sx={{ border: 0 }}
+          sx={{
+            border: 0,
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+          }}
         />
       </Paper>
     </div>
