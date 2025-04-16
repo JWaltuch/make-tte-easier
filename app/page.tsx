@@ -109,7 +109,7 @@ export default function Page() {
       renderCell: (params) => (
         <Tooltip
           title={name === 'description' ? params.row.description : ''}
-          placement="bottom"
+          placement="bottom-start"
         >
           <a
             href={`https://tabletop.events${params.row.view_uri}`}
