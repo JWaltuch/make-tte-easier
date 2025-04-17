@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  # runs on pushes to the main branch
+  push:
+    branches: [main]
+  # also runs inside pull requests that target the main branch
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    # uses a Ubuntu Docker image (like a virtual machine)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      # install dependencies
+      - run: npm ci
+      # run ESLint & Prettier
+      - run: npm run lint
+      - run: npm run prettier
+      # verify that there are no build errors
+      - run: npm run build
+      # run tests tbd

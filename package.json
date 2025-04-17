@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "next dev",
-    "build": "prettier --check . && next lint && next build",
+    "build": "npm run prettier && next lint && next build",
     "start": "next start",
     "lint": "next lint",
     "prettier": "prettier 'app/*.{js,ts,jsx,tsx}' --check --config prettierrc.json --ignore-path .prettierignore",
