@@ -17,7 +17,7 @@ type BasicRowType = {
   id: string;
   name: string;
   description: string;
-  startdaypart_name: string;
+  day: string;
   type_id: string;
   type: string;
   room_name: string;
@@ -101,9 +101,8 @@ export default function Page() {
     "name",
     "type",
     "description",
-    "startdaypart_name",
+    "day",
     "duration",
-    "date_created",
     "date_updated",
     "space",
     "room_name",
@@ -113,7 +112,12 @@ export default function Page() {
       field: name,
       headerName: name,
       width:
-        name === "duration" || name === "space" || name === "type" ? 80 : 170,
+        name === "name" ||
+        name === "date_updated" ||
+        name === "description" ||
+        name === "day"
+          ? 200
+          : 120,
       renderCell: (params) => (
         <Tooltip
           title={name === "description" ? params.row.description : ""}
@@ -121,6 +125,7 @@ export default function Page() {
         >
           <a
             href={`https://tabletop.events${params.row.view_uri}`}
+            style={{ color: "black", textDecoration: "none" }}
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -151,7 +156,7 @@ export default function Page() {
             id: row.id,
             name: row.name,
             description: row.description,
-            startdaypart_name: row.startdaypart_name ?? "Not scheduled",
+            day: row.startdaypart_name ?? "Not scheduled",
             room_name: row.room_name ?? "Not scheduled",
             space: row.space_name ?? "Not scheduled",
             type_id: row.type_id,
@@ -241,6 +246,7 @@ export default function Page() {
           }}
           onPaginationModelChange={onPaginationModelChange}
           pageSizeOptions={[100]}
+          isRowSelectable={() => false}
           sx={{
             border: 0,
           }}

@@ -23,7 +23,7 @@ Visit http://localhost:3000/
 
 - handle custom fields?
 - github lint checks
-- links look nicer
+- **links look nicer**
 - full page niceness
 - add missing types - linter check types
 - user can provide convention id
