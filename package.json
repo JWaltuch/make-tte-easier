@@ -4,8 +4,8 @@
     "build": "prettier --check . && next lint && next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier": "prettier . --check --config prettierrc.json --ignore-path .prettierignore",
-    "format": "prettier . --write",
+    "prettier": "prettier 'app/*.{js,ts,jsx,tsx}' --check --config prettierrc.json --ignore-path .prettierignore",
+    "format": "prettier 'app/*.{js,ts,jsx,tsx}' --write --config prettierrc.json --ignore-path .prettierignore",
     "husky": "npx husky init",
     "prepare": "husky"
   },
