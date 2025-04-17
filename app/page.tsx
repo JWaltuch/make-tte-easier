@@ -11,8 +11,6 @@ import {
   Tooltip,
 } from "@mui/material";
 
-const ORIGINS_2025_ID = "8D0356F0-D38B-11EF-9091-1D8264B1C7F0";
-//const CLOCKTOWER_2025_ID = "32D6B730-365B-11EF-B58A-DCC620F8A28C";
 const ITEMS_PER_PAGE = "100";
 
 type BasicRowType = {
@@ -50,11 +48,12 @@ type AdvancedRowType = {
 const fetchEvents = async (
   setData: Dispatch<SetStateAction<AdvancedRowType[]>>,
   currentPageNumber: number,
+  currentConvention: string,
   setTotalItems?: Dispatch<SetStateAction<number>>,
   setTotalPages?: Dispatch<SetStateAction<number[]>>
 ) => {
   const url = new URL(
-    `https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events?is_scheduled=1&is_cancelled=0`
+    `https://tabletop.events/api/convention/${currentConvention}/events?is_scheduled=1&is_cancelled=0`
   );
   url.searchParams.append("_items_per_page", ITEMS_PER_PAGE);
   url.searchParams.append("_page_number", String(currentPageNumber));
@@ -79,6 +78,15 @@ const fetchEvents = async (
 };
 
 export default function Page() {
+  const [conventions, setConventions] = useState<
+    { name: string; id: string }[]
+  >([
+    { name: "Final 3 Con 2025", id: "32D6B730-365B-11EF-B58A-DCC620F8A28C" },
+    { name: "Origins 2025", id: "8D0356F0-D38B-11EF-9091-1D8264B1C7F0" },
+  ]);
+  const [currentConvention, setCurrentConvention] = useState<string>(
+    "8D0356F0-D38B-11EF-9091-1D8264B1C7F0"
+  );
   const [rowData, setRowData] = useState<AdvancedRowType[]>([]);
   const [rows, setRows] = useState<BasicRowType[]>([]);
   const [totalItems, setTotalItems] = useState<number>(1);
@@ -124,8 +132,15 @@ export default function Page() {
   });
 
   useEffect(() => {
-    fetchEvents(setRowData, currentPageNumber, setTotalItems, setTotalPages);
-  }, [currentPageNumber]);
+    setRowData([]);
+    fetchEvents(
+      setRowData,
+      currentPageNumber,
+      currentConvention,
+      setTotalItems,
+      setTotalPages
+    );
+  }, [currentPageNumber, currentConvention]);
 
   useEffect(() => {
     if (rowData.length > 0) {
@@ -159,37 +174,65 @@ export default function Page() {
 
   return (
     <div>
-      <FormControl fullWidth>
-        <InputLabel id="page-select-label">Select Page</InputLabel>
-        <Select
-          labelId="page-select"
-          id="page-select"
-          value={currentPageNumber}
-          label="Page"
-          onChange={(event) => {
-            const newPage = Number(event.target.value);
-            console.log(newPage);
-            setCurrentPageNumber(newPage);
-            onPaginationModelChange({
-              page: newPage - 1,
-              pageSize: Number(ITEMS_PER_PAGE),
-            });
-          }}
-        >
-          {totalPages.map((pg) => {
-            return (
-              <MenuItem value={pg} key={pg}>
-                {pg}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+      <div style={{ display: "flex" }}>
+        <FormControl fullWidth>
+          <InputLabel id="page-select-label">Select Page</InputLabel>
+          <Select
+            labelId="page-select"
+            id="page-select"
+            value={currentPageNumber}
+            label="Page"
+            onChange={(event) => {
+              const newPage = Number(event.target.value);
+              console.log(newPage);
+              setCurrentPageNumber(newPage);
+              onPaginationModelChange({
+                page: newPage - 1,
+                pageSize: Number(ITEMS_PER_PAGE),
+              });
+            }}
+          >
+            {totalPages.map((pg) => {
+              return (
+                <MenuItem value={pg} key={pg}>
+                  {pg}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id="page-select-label">Select Convention</InputLabel>
+          <Select
+            labelId="convention-select"
+            id="convention-select"
+            value={currentConvention}
+            label="Convention"
+            onChange={(event) => {
+              setCurrentConvention(event.target.value);
+            }}
+          >
+            {conventions.map((convention) => {
+              return (
+                <MenuItem value={convention.id} key={convention.id}>
+                  {convention.name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </div>
       <Paper sx={{ height: 600, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={cols}
-          loading={rows.length === 0}
+          loading={rowData.length === 0}
+          slotProps={{
+            loadingOverlay: {
+              variant: "circular-progress",
+              noRowsVariant: "circular-progress",
+            },
+          }}
           paginationModel={paginationModel}
           rowCount={totalItems}
           paginationMode="server"
