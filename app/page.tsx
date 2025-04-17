@@ -1,18 +1,19 @@
-'use client';
+"use client";
 
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { DataGrid, GridColDef, GridPaginationModel } from '@mui/x-data-grid';
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { DataGrid, GridColDef, GridPaginationModel } from "@mui/x-data-grid";
 import {
   FormControl,
   InputLabel,
   MenuItem,
   Paper,
   Select,
-} from '@mui/material';
+  Tooltip,
+} from "@mui/material";
 
-const ORIGINS_2025_ID = '8D0356F0-D38B-11EF-9091-1D8264B1C7F0';
+const ORIGINS_2025_ID = "8D0356F0-D38B-11EF-9091-1D8264B1C7F0";
 //const CLOCKTOWER_2025_ID = "32D6B730-365B-11EF-B58A-DCC620F8A28C";
-const ITEMS_PER_PAGE = '100';
+const ITEMS_PER_PAGE = "100";
 
 type BasicRowType = {
   id: string;
@@ -55,21 +56,21 @@ const fetchEvents = async (
   const url = new URL(
     `https://tabletop.events/api/convention/${ORIGINS_2025_ID}/events?is_scheduled=1&is_cancelled=0`
   );
-  url.searchParams.append('_items_per_page', ITEMS_PER_PAGE);
-  url.searchParams.append('_page_number', String(currentPageNumber));
-  url.searchParams.append('_order_by', 'date_updated');
-  url.searchParams.append('_sort_order', 'desc');
-  url.searchParams.append('_include_related_objects', 'type');
+  url.searchParams.append("_items_per_page", ITEMS_PER_PAGE);
+  url.searchParams.append("_page_number", String(currentPageNumber));
+  url.searchParams.append("_order_by", "date_updated");
+  url.searchParams.append("_sort_order", "desc");
+  url.searchParams.append("_include_related_objects", "type");
   // url.searchParams.append("_include_related_objects", "eventsubmission");
   const data = await fetch(url);
   const events = await data.json();
 
-  const totalItems = events['result']['paging']['total_items'];
-  const items = events['result']['items'];
+  const totalItems = events["result"]["paging"]["total_items"];
+  const items = events["result"]["items"];
   if (setTotalItems) {
     setTotalItems(totalItems);
     const allPages = Array.from(
-      { length: events['result']['paging']['total_pages'] },
+      { length: events["result"]["paging"]["total_pages"] },
       (_, index) => index + 1
     );
     setTotalPages(allPages);
@@ -89,37 +90,42 @@ export default function Page() {
   });
 
   const COL_NAMES = [
-    'name',
-    'type',
-    'description',
-    'startdaypart_name',
-    'duration',
-    'date_created',
-    'date_updated',
-    'space',
-    'room_name',
+    "name",
+    "type",
+    "description",
+    "startdaypart_name",
+    "duration",
+    "date_created",
+    "date_updated",
+    "space",
+    "room_name",
   ];
   const cols: GridColDef<(typeof rows)[number]>[] = COL_NAMES.map((name) => {
     return {
       field: name,
       headerName: name,
       width:
-        name === 'duration' || name === 'space' || name === 'type' ? 80 : 170,
+        name === "duration" || name === "space" || name === "type" ? 80 : 170,
       renderCell: (params) => (
-        <a
-          href={`https://tabletop.events${params.row.view_uri}`}
-          target="_blank"
-          rel="noopener noreferrer"
+        <Tooltip
+          title={name === "description" ? params.row.description : ""}
+          placement="bottom-start"
         >
-          {params.value}
-        </a>
+          <a
+            href={`https://tabletop.events${params.row.view_uri}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {params.value}
+          </a>
+        </Tooltip>
       ),
     };
   });
 
   useEffect(() => {
     fetchEvents(setRowData, currentPageNumber, setTotalItems, setTotalPages);
-  }, []);
+  }, [currentPageNumber]);
 
   useEffect(() => {
     if (rowData.length > 0) {
@@ -130,9 +136,9 @@ export default function Page() {
             id: row.id,
             name: row.name,
             description: row.description,
-            startdaypart_name: row.startdaypart_name ?? 'Not scheduled',
-            room_name: row.room_name ?? 'Not scheduled',
-            space: row.space_name ?? 'Not scheduled',
+            startdaypart_name: row.startdaypart_name ?? "Not scheduled",
+            room_name: row.room_name ?? "Not scheduled",
+            space: row.space_name ?? "Not scheduled",
             type_id: row.type_id,
             type: row.type.name,
             date_created: row.date_created,
@@ -147,7 +153,6 @@ export default function Page() {
 
   const onPaginationModelChange = (model: GridPaginationModel) => {
     const nextPage = model.page;
-    fetchEvents(setRowData, nextPage + 1);
     setCurrentPageNumber(nextPage + 1);
     setPaginationModel({ ...model, page: nextPage });
   };
@@ -172,11 +177,15 @@ export default function Page() {
           }}
         >
           {totalPages.map((pg) => {
-            return <MenuItem value={pg}>{pg}</MenuItem>;
+            return (
+              <MenuItem value={pg} key={pg}>
+                {pg}
+              </MenuItem>
+            );
           })}
         </Select>
       </FormControl>
-      <Paper sx={{ height: 600, width: '100%' }}>
+      <Paper sx={{ height: 600, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={cols}
@@ -184,10 +193,14 @@ export default function Page() {
           paginationModel={paginationModel}
           rowCount={totalItems}
           paginationMode="server"
-          paginationMeta={{ hasNextPage: currentPageNumber * 100 < totalItems }}
+          paginationMeta={{
+            hasNextPage: currentPageNumber * 100 < totalItems,
+          }}
           onPaginationModelChange={onPaginationModelChange}
           pageSizeOptions={[100]}
-          sx={{ border: 0 }}
+          sx={{
+            border: 0,
+          }}
         />
       </Paper>
     </div>
