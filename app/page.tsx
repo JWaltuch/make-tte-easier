@@ -10,39 +10,25 @@ import {
   Select,
   Tooltip,
 } from "@mui/material";
+import { AdvancedRowType, BasicRowType, ConventionType } from "./types";
 
 const ITEMS_PER_PAGE = "100";
 
-type BasicRowType = {
-  id: string;
-  name: string;
-  description: string;
-  day: string;
-  type_id: string;
-  type: string;
-  room_name: string;
-  space: string;
-  date_created: Date | string;
-  date_updated: Date | string;
-  view_uri: string;
-  duration: string;
-};
-
-type AdvancedRowType = {
-  id: string;
-  name: string;
-  description: string;
-  startdaypart_name: string;
-  type_id: string;
-  type: {
-    name: string;
-  };
-  room_name: string;
-  space_name: string;
-  date_created: Date | string;
-  date_updated: Date | string;
-  view_uri: string;
-  duration: string;
+const getConventionData = async (
+  setConventions: Dispatch<SetStateAction<ConventionType[]>>
+) => {
+  const url = new URL(`https://tabletop.events/api/convention`);
+  url.searchParams.append("_items_per_page", ITEMS_PER_PAGE);
+  url.searchParams.append("_order_by", "name");
+  url.searchParams.append("_sort_order", "asc");
+  const data = await fetch(url);
+  const conventions = await data.json();
+  const items = conventions["result"]["items"];
+  setConventions(
+    items.map((con: ConventionType) => {
+      return { name: con.name, id: con.id };
+    })
+  );
 };
 
 const fetchEvents = async (
@@ -80,10 +66,7 @@ const fetchEvents = async (
 export default function Page() {
   const [conventions, setConventions] = useState<
     { name: string; id: string }[]
-  >([
-    { name: "Final 3 Con 2025", id: "32D6B730-365B-11EF-B58A-DCC620F8A28C" },
-    { name: "Origins 2025", id: "8D0356F0-D38B-11EF-9091-1D8264B1C7F0" },
-  ]);
+  >([]);
   const [currentConvention, setCurrentConvention] = useState<string>(
     "8D0356F0-D38B-11EF-9091-1D8264B1C7F0"
   );
@@ -135,6 +118,10 @@ export default function Page() {
       ),
     };
   });
+
+  useEffect(() => {
+    getConventionData(setConventions);
+  }, []);
 
   useEffect(() => {
     setRowData([]);
