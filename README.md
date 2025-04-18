@@ -22,10 +22,8 @@ Visit http://localhost:3000/
 ##### TO DO
 
 - handle custom fields?
-- github lint checks
 - links look nicer
 - full page niceness
 - add missing types - linter check types
-- user can provide convention id
 - fix linting
 - **include and filter by game system and event types**

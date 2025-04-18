@@ -10,40 +10,9 @@ import {
   Select,
   Tooltip,
 } from "@mui/material";
-
-const ITEMS_PER_PAGE = "100";
-
-type BasicRowType = {
-  id: string;
-  name: string;
-  description: string;
-  day: string;
-  type_id: string;
-  type: string;
-  room_name: string;
-  space: string;
-  date_created: Date | string;
-  date_updated: Date | string;
-  view_uri: string;
-  duration: string;
-};
-
-type AdvancedRowType = {
-  id: string;
-  name: string;
-  description: string;
-  startdaypart_name: string;
-  type_id: string;
-  type: {
-    name: string;
-  };
-  room_name: string;
-  space_name: string;
-  date_created: Date | string;
-  date_updated: Date | string;
-  view_uri: string;
-  duration: string;
-};
+import { AdvancedRowType, BasicRowType, ConventionType } from "./types";
+import { ITEMS_PER_PAGE } from "./constants";
+import ConventionDropdown from "./convention-dropdown";
 
 const fetchEvents = async (
   setData: Dispatch<SetStateAction<AdvancedRowType[]>>,
@@ -78,12 +47,6 @@ const fetchEvents = async (
 };
 
 export default function Page() {
-  const [conventions, setConventions] = useState<
-    { name: string; id: string }[]
-  >([
-    { name: "Final 3 Con 2025", id: "32D6B730-365B-11EF-B58A-DCC620F8A28C" },
-    { name: "Origins 2025", id: "8D0356F0-D38B-11EF-9091-1D8264B1C7F0" },
-  ]);
   const [currentConvention, setCurrentConvention] = useState<string>(
     "8D0356F0-D38B-11EF-9091-1D8264B1C7F0"
   );
@@ -206,26 +169,10 @@ export default function Page() {
             })}
           </Select>
         </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id="page-select-label">Select Convention</InputLabel>
-          <Select
-            labelId="convention-select"
-            id="convention-select"
-            value={currentConvention}
-            label="Convention"
-            onChange={(event) => {
-              setCurrentConvention(event.target.value);
-            }}
-          >
-            {conventions.map((convention) => {
-              return (
-                <MenuItem value={convention.id} key={convention.id}>
-                  {convention.name}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
+        <ConventionDropdown
+          currentConvention={currentConvention}
+          setCurrentConvention={setCurrentConvention}
+        />
       </div>
       <Paper sx={{ height: 600, width: "100%" }}>
         <DataGrid
