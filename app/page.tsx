@@ -83,7 +83,11 @@ export default function Page() {
           : 120,
       renderCell: (params) => (
         <Tooltip
-          title={name === "description" ? params.row.description : ""}
+          title={
+            name === "description"
+              ? params.row.description
+              : "Click to open in new tab"
+          }
           placement="bottom-start"
         >
           <a

@@ -57,7 +57,7 @@ export default function ConventionDropdown({
         totalPages
       );
     }
-  }, [conventions, totalPages]);
+  }, [conventions, totalPages, currentPage]);
 
   return (
     <FormControl fullWidth>
