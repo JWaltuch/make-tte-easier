@@ -11,15 +11,15 @@ import {
   Tooltip,
 } from "@mui/material";
 import { AdvancedRowType, BasicRowType, ConventionType } from "./types";
-import { ITEMS_PER_PAGE } from "./constants";
+import { ITEMS_PER_PAGE, NOT_SCHEDULED } from "./constants";
 import ConventionDropdown from "./convention-dropdown";
 
 const fetchEvents = async (
   setData: Dispatch<SetStateAction<AdvancedRowType[]>>,
   currentPageNumber: number,
   currentConvention: string,
-  setTotalItems?: Dispatch<SetStateAction<number>>,
-  setTotalPages?: Dispatch<SetStateAction<number[]>>
+  setTotalItems: Dispatch<SetStateAction<number>>,
+  setTotalPages: Dispatch<SetStateAction<number[]>>
 ) => {
   const url = new URL(
     `https://tabletop.events/api/convention/${currentConvention}/events?is_scheduled=1&is_cancelled=0`
@@ -35,14 +35,12 @@ const fetchEvents = async (
 
   const totalItems = events["result"]["paging"]["total_items"];
   const items = events["result"]["items"];
-  if (setTotalItems) {
-    setTotalItems(totalItems);
-    const allPages = Array.from(
-      { length: events["result"]["paging"]["total_pages"] },
-      (_, index) => index + 1
-    );
-    setTotalPages(allPages);
-  }
+  setTotalItems(totalItems);
+  const allPages = Array.from(
+    { length: events["result"]["paging"]["total_pages"] },
+    (_, index) => index + 1
+  );
+  setTotalPages(allPages);
   setData(items);
 };
 
@@ -123,9 +121,9 @@ export default function Page() {
             id: row.id,
             name: row.name,
             description: row.description,
-            day: row.startdaypart_name ?? "Not scheduled",
-            room_name: row.room_name ?? "Not scheduled",
-            space: row.space_name ?? "Not scheduled",
+            day: row.startdaypart_name ?? NOT_SCHEDULED,
+            room_name: row.room_name ?? NOT_SCHEDULED,
+            space: row.space_name ?? NOT_SCHEDULED,
             type_id: row.type_id,
             type: row.type.name,
             date_created: row.date_created,

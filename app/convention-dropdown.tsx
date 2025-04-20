@@ -17,7 +17,7 @@ const getConventionData = async (
   const data = await fetch(url);
   const conventions = await data.json();
   const items = conventions["result"]["items"];
-  setConventions((prev) => {
+  setConventions(prev => {
     console.log(prev);
     console.log(
       items.map((con: ConventionType) => {
@@ -67,11 +67,11 @@ export default function ConventionDropdown({
         id="convention-select"
         value={currentConvention}
         label="Convention"
-        onChange={(event) => {
+        onChange={event => {
           setCurrentConvention(event.target.value);
         }}
       >
-        {conventions.map((convention) => {
+        {conventions.map(convention => {
           return (
             <MenuItem value={convention.id} key={convention.id}>
               {convention.name}

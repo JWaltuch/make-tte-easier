@@ -5,6 +5,10 @@ const compat = new FlatCompat({
 });
 const eslintConfig = [
   ...compat.config({
+    parserOptions: {
+      ecmaVersion: 2020,
+      sourceType: "module"
+    },
     extends: ["next", "prettier"],
   }),
 ];
