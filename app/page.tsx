@@ -205,11 +205,6 @@ export default function Page() {
           sx={{
             border: 0,
           }}
-          autosizeOptions={{
-            columns: ["type"],
-            includeOutliers: true,
-            includeHeaders: false,
-          }}
         />
       </Paper>
     </div>
