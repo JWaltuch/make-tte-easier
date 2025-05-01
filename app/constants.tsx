@@ -12,6 +12,7 @@ import WebStoriesIcon from "@mui/icons-material/WebStories";
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import CurtainsIcon from "@mui/icons-material/Curtains";
 import CycloneIcon from "@mui/icons-material/Cyclone";
+import ExtensionRoundedIcon from "@mui/icons-material/ExtensionRounded";
 
 export const ITEMS_PER_PAGE = "100";
 
@@ -31,14 +32,15 @@ export const GAME_ICON_MAP = {
   "Roleplaying Game": <AutoStoriesIcon />,
   "Miniatures Game": <CastleIcon />,
   Wargame: <FortIcon />,
-  "Live-Action Role Playing Game": <Groups2Icon />,
+  "Live Action Roleplaying Game": <Groups2Icon />,
   "Social Deduction/Deception": <PsychologyIcon />,
   "Card Game": <WebStoriesIcon />,
-  "Paint and Take": <ColorLensIcon />,
+  Workshop: <ColorLensIcon />,
   "Seminars and Panels": <InterpreterModeIcon />,
   Food: <DiningIcon />,
   Tournament: <EmojiEventsIcon />,
   "Video Games": <SportsEsportsIcon />,
   Eclectic: <CycloneIcon />,
   Entertainment: <CurtainsIcon />,
+  "Puzzle Games": <ExtensionRoundedIcon />,
 };
