@@ -11,7 +11,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { AdvancedRowType, BasicRowType, ConventionType } from "./types";
-import { ITEMS_PER_PAGE } from "./constants";
+import { COL_NAMES, GAME_ICON_MAP, ITEMS_PER_PAGE } from "./constants";
 import ConventionDropdown from "./convention-dropdown";
 
 const fetchEvents = async (
@@ -60,46 +60,50 @@ export default function Page() {
     pageSize: Number(ITEMS_PER_PAGE),
   });
 
-  const COL_NAMES = [
-    "name",
-    "type",
-    "description",
-    "day",
-    "duration",
-    "date_updated",
-    "space",
-    "room_name",
-  ];
   const cols: GridColDef<(typeof rows)[number]>[] = COL_NAMES.map((name) => {
     return {
       field: name,
       headerName: name,
-      width:
+      minWidth:
         name === "name" ||
         name === "date_updated" ||
         name === "description" ||
-        name === "day"
+        name === "day" ||
+        name === "room_name"
           ? 200
-          : 120,
-      renderCell: (params) => (
-        <Tooltip
-          title={
-            name === "description"
-              ? params.row.description
-              : "Click to open in new tab"
-          }
-          placement="bottom-start"
-        >
-          <a
-            href={`https://tabletop.events${params.row.view_uri}`}
-            style={{ color: "black", textDecoration: "none" }}
-            target="_blank"
-            rel="noopener noreferrer"
+          : 50,
+      maxWidth: name === "type" ? 50 : 200,
+      renderCell: (params) =>
+        name === "type" ? (
+          <Tooltip title={params.value}>
+            <a
+              href={`https://tabletop.events${params.row.view_uri}`}
+              style={{ color: "black", textDecoration: "none" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {GAME_ICON_MAP[params.value]}
+            </a>
+          </Tooltip>
+        ) : (
+          <Tooltip
+            title={
+              name === "description"
+                ? params.row.description
+                : "Click to open in new tab"
+            }
+            placement="bottom-start"
           >
-            {params.value}
-          </a>
-        </Tooltip>
-      ),
+            <a
+              href={`https://tabletop.events${params.row.view_uri}`}
+              style={{ color: "black", textDecoration: "none" }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {params.value}
+            </a>
+          </Tooltip>
+        ),
     };
   });
 
@@ -123,9 +127,9 @@ export default function Page() {
             id: row.id,
             name: row.name,
             description: row.description,
-            day: row.startdaypart_name ?? "Not scheduled",
-            room_name: row.room_name ?? "Not scheduled",
-            space: row.space_name ?? "Not scheduled",
+            day: row.startdaypart_name,
+            room_name: row.room_name,
+            space: row.space_name,
             type_id: row.type_id,
             type: row.type.name,
             date_created: row.date_created,
@@ -200,6 +204,11 @@ export default function Page() {
           isRowSelectable={() => false}
           sx={{
             border: 0,
+          }}
+          autosizeOptions={{
+            columns: ["type"],
+            includeOutliers: true,
+            includeHeaders: false,
           }}
         />
       </Paper>
